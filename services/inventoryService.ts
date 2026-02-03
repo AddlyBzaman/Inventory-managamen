@@ -2,13 +2,13 @@
 import { InventoryItem, HistoryItem } from '../app/types';
 
 class InventoryService {
-  private readonly API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+  private readonly API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 
   async getAllProducts(): Promise<InventoryItem[]> {
     try {
-      console.log('🔄 Fetching products from:', `${this.API_BASE}/api/products`);
+      console.log('🔄 Fetching products from:', `${this.API_BASE}/products`);
       
-      const response = await fetch(`${this.API_BASE}/api/products`, {
+      const response = await fetch(`${this.API_BASE}/products`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -40,7 +40,7 @@ class InventoryService {
 
   async getAllHistory(): Promise<HistoryItem[]> {
     try {
-      const response = await fetch(`${this.API_BASE}/api/history`, {
+      const response = await fetch(`${this.API_BASE}/history`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -63,7 +63,7 @@ class InventoryService {
 
   async createProduct(productData: Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<InventoryItem> {
     try {
-      const response = await fetch(`${this.API_BASE}/api/products`, {
+      const response = await fetch(`${this.API_BASE}/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

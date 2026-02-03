@@ -38,6 +38,7 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
       if (data.success) {
         // Clear localStorage
         localStorage.removeItem('user');
+        localStorage.removeItem('auth-token'); // Clear auth token too
         
         toast.success('Logout berhasil');
         
