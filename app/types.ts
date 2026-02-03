@@ -17,9 +17,9 @@ export interface HistoryItem {
   id: string;
   productId: string;
   productName: string;
-  action: 'added' | 'updated' | 'deleted';
+  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'added' | 'updated' | 'deleted' | 'stock_added' | 'stock_subtracted';
   quantity: number;
-  timestamp: Date;
+  timestamp: Date | number;
   userId: string;
   userName: string;
   details?: string;

@@ -22,9 +22,30 @@ export function HistoryList({ items }: HistoryListProps) {
 
   // Get action counts
   const actionCounts = {
-    added: items.filter(item => item.action === 'added').length,
-    updated: items.filter(item => item.action === 'updated').length,
-    deleted: items.filter(item => item.action === 'deleted').length
+    create: items.filter(item => item.action === 'CREATE' || item.action === 'added').length,
+    update: items.filter(item => item.action === 'UPDATE' || item.action === 'updated').length,
+    delete: items.filter(item => item.action === 'DELETE' || item.action === 'deleted').length,
+    stock: items.filter(item => item.action === 'stock_added' || item.action === 'stock_subtracted').length
+  };
+
+  const getActionLabel = (action: string) => {
+    switch (action) {
+      case 'CREATE':
+      case 'added':
+        return 'Items Added';
+      case 'UPDATE':
+      case 'updated':
+        return 'Items Updated';
+      case 'DELETE':
+      case 'deleted':
+        return 'Items Deleted';
+      case 'stock_added':
+        return 'Stock Added';
+      case 'stock_subtracted':
+        return 'Stock Reduced';
+      default:
+        return action;
+    }
   };
 
   const getActionIcon = (action: string) => {
@@ -89,7 +110,7 @@ export function HistoryList({ items }: HistoryListProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Items Added</p>
-              <p className="text-2xl font-bold text-green-600 mt-2">{actionCounts.added}</p>
+              <p className="text-2xl font-bold text-green-600 mt-2">{actionCounts.create}</p>
             </div>
             <div className="bg-green-100 p-3 rounded-lg">
               <Plus className="h-6 w-6 text-green-600" />
@@ -101,7 +122,7 @@ export function HistoryList({ items }: HistoryListProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Items Updated</p>
-              <p className="text-2xl font-bold text-blue-600 mt-2">{actionCounts.updated}</p>
+              <p className="text-2xl font-bold text-blue-600 mt-2">{actionCounts.update}</p>
             </div>
             <div className="bg-blue-100 p-3 rounded-lg">
               <Edit className="h-6 w-6 text-blue-600" />
@@ -113,7 +134,7 @@ export function HistoryList({ items }: HistoryListProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Items Deleted</p>
-              <p className="text-2xl font-bold text-red-600 mt-2">{actionCounts.deleted}</p>
+              <p className="text-2xl font-bold text-red-600 mt-2">{actionCounts.delete}</p>
             </div>
             <div className="bg-red-100 p-3 rounded-lg">
               <Trash2 className="h-6 w-6 text-red-600" />
@@ -208,12 +229,13 @@ export function HistoryList({ items }: HistoryListProps) {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${actionColor}`}>
                           {getActionIcon(item.action)}
-                          <span className="ml-1">{item.action}</span>
+                          <span className="ml-1">{getActionLabel(item.action)}</span>
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm font-medium text-gray-900">
-                          {item.action === 'added' ? '+' : item.action === 'deleted' ? '-' : '±'}
+                          {item.action === 'CREATE' || item.action === 'added' || item.action === 'stock_added' ? '+' : 
+                           item.action === 'DELETE' || item.action === 'deleted' || item.action === 'stock_subtracted' ? '-' : '±'}
                           {Math.abs(item.quantity)}
                         </div>
                       </td>
