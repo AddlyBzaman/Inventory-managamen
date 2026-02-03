@@ -73,9 +73,9 @@ export default function AddItemPage() {
       await inventoryService.createProduct(productData);
       toast.success('Item added successfully!');
       
-      // Redirect to inventory page after success
+      // Redirect to dashboard page after success (not home page)
       setTimeout(() => {
-        router.push('/');
+        router.push('/dashboard');
       }, 1500);
     } catch (error) {
       console.error('Add item error:', error);
