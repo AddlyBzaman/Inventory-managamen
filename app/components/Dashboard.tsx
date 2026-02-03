@@ -112,8 +112,8 @@ export function Dashboard({ inventory, history }: DashboardProps) {
                   <div key={activity.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className={`w-2 h-2 rounded-full ${
-                        activity.action === 'added' ? 'bg-green-500' :
-                        activity.action === 'updated' ? 'bg-blue-500' :
+                        activity.action === 'CREATE' || activity.action === 'added' || activity.action === 'stock_added' ? 'bg-green-500' :
+                        activity.action === 'UPDATE' || activity.action === 'updated' ? 'bg-blue-500' :
                         'bg-red-500'
                       }`} />
                       <div>
@@ -121,13 +121,26 @@ export function Dashboard({ inventory, history }: DashboardProps) {
                           {activity.productName}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {activity.action} by {activity.userName || 'Unknown'}
+                          {activity.action === 'CREATE' || activity.action === 'added' ? 'Items Added' :
+                           activity.action === 'UPDATE' || activity.action === 'updated' ? 'Items Updated' :
+                           activity.action === 'DELETE' || activity.action === 'deleted' ? 'Items Deleted' :
+                           activity.action === 'stock_added' ? 'Stock Added' :
+                           activity.action === 'stock_subtracted' ? 'Stock Reduced' :
+                           activity.action} by {activity.userName || 'Unknown'}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-900">
-                        {activity.action === 'added' ? '+' : activity.action === 'updated' ? '±' : '-'}{Math.abs(activity.quantity)}
+                      <p className={`text-sm font-medium ${
+                        activity.action === 'CREATE' || activity.action === 'added' || activity.action === 'stock_added' 
+                          ? 'text-green-600' 
+                          : activity.action === 'DELETE' || activity.action === 'deleted' || activity.action === 'stock_subtracted'
+                          ? 'text-red-600'
+                          : 'text-gray-900'
+                      }`}>
+                        {activity.action === 'CREATE' || activity.action === 'added' || activity.action === 'stock_added' ? '+' : 
+                         activity.action === 'DELETE' || activity.action === 'deleted' || activity.action === 'stock_subtracted' ? '-' : '±'}
+                        {Math.abs(activity.quantity)}
                       </p>
                       <p className="text-xs text-gray-500">
                         {new Date(activity.timestamp).toLocaleDateString()}

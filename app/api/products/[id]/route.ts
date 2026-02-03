@@ -167,38 +167,44 @@ export async function DELETE(
 
     // Add history record for deletion
     try {
+      console.log('🔄 Starting delete history creation...');
+      
       const client = createClient({
         url: process.env.TURSO_DATABASE_URL || '',
         authToken: process.env.TURSO_AUTH_TOKEN || '',
+      });
+      
+      const historyId = crypto.randomUUID();
+      const timestamp = new Date().getTime().toString();
+      
+      console.log('📝 Preparing history record:', {
+        historyId,
+        productId: deletedProduct.id,
+        productName: deletedProduct.name,
+        action: 'DELETE',
+        quantity: deletedProduct.quantity,
+        timestamp,
+        userId: 'system',
+        userName: 'System',
+        details: `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
       });
       
       await client.execute(`
         INSERT INTO history_items (id, productId, productName, action, quantity, timestamp, userId, userName, details)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `, [
-        crypto.randomUUID(),
+        historyId,
         deletedProduct.id,
         deletedProduct.name,
         'DELETE',
         deletedProduct.quantity,
-        new Date().getTime().toString(), // Use numeric timestamp for schema
-        'system', // TODO: Get actual user ID from auth
+        timestamp,
+        'system',
         'System',
         `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
       ]);
       
       console.log('✅ Delete history record created successfully');
-      console.log('📝 History details stored in database:', {
-        id: 'generated-uuid',
-        productId: deletedProduct.id,
-        productName: deletedProduct.name,
-        action: 'DELETE',
-        quantity: deletedProduct.quantity,
-        timestamp: new Date().getTime().toString(),
-        userId: 'system',
-        userName: 'System',
-        details: `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
-      });
       
       // Verify the record was inserted
       const verifyResult = await client.execute(`
@@ -208,10 +214,17 @@ export async function DELETE(
       console.log('🔍 Verification - Record found in database:', verifyResult.rows.length > 0);
       if (verifyResult.rows.length > 0) {
         console.log('📋 Stored record:', verifyResult.rows[0]);
+      } else {
+        console.log('❌ ERROR: History record was NOT found in database after insert!');
       }
+      
     } catch (historyError) {
-      console.warn('Failed to create delete history:', historyError);
-      // Continue even if history fails
+      console.error('❌ FAILED to create delete history:', historyError);
+      console.error('❌ History error details:', {
+        message: historyError.message,
+        stack: historyError.stack
+      });
+      // Continue even if history fails - but log the error
     }
 
     return NextResponse.json({ 
