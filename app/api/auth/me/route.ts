@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../../lib/db';
-import { users } from '../../../../lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { createClient } from '@libsql/client';
 
 export async function GET(request: NextRequest) {
   try {
-    // For now, we'll implement a simple session check
-    // In production, you should use proper session management (JWT, cookies, etc.)
-    
     // Get user from session (simplified - implement proper session management)
     const sessionId = request.cookies.get('session')?.value;
     
