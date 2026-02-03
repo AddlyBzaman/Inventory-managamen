@@ -5,9 +5,11 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  let productId;
   try {
     const { quantity, type, notes } = await request.json();
-    const { id: productId } = await params;
+    const resolvedParams = await params;
+    productId = resolvedParams.id;
 
     const client = createClient({
       url: process.env.TURSO_DATABASE_URL || '',
@@ -66,7 +68,7 @@ export async function POST(
     };
 
     await client.execute(`
-      INSERT INTO historyItems (id, productId, productName, action, quantity, timestamp, userId, userName, details)
+      INSERT INTO history_items (id, productId, productName, action, quantity, timestamp, userId, userName, details)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       historyRecord.id,
@@ -94,6 +96,11 @@ export async function POST(
 
   } catch (error) {
     console.error('Error updating stock:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      productId: productId
+    });
     return NextResponse.json(
       { success: false, message: 'Failed to update stock', error: error.message },
       { status: 500 }

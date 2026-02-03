@@ -64,3 +64,22 @@
 [01:14:56.950] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
 [01:14:57.078] Browser ERROR   Error fetching history: {}
 [01:14:57.078] Browser ERROR   Error fetching history: {}
+[01:26:09.623] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:16.937] Browser LOG     🔄 Starting data load...
+[01:26:16.937] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:26:16.937] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:26:16.937] Browser LOG     🔄 Starting data load...
+[01:26:16.937] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:26:16.937] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:26:17.363] Browser LOG     📡 Response status: 404
+[01:26:17.363] Browser LOG     📡 Response ok: false
+[01:26:17.363] Browser ERROR   ❌ Error fetching products: {}
+[01:26:17.363] Browser ERROR   ❌ Load data error: {}
+[01:26:17.363] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:26:17.363] Browser LOG     📡 Response status: 404
+[01:26:17.363] Browser LOG     📡 Response ok: false
+[01:26:17.363] Browser ERROR   ❌ Error fetching products: {}
+[01:26:17.363] Browser ERROR   ❌ Load data error: {}
+[01:26:17.363] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:26:17.363] Browser ERROR   Error fetching history: {}
+[01:26:17.363] Browser ERROR   Error fetching history: {}
