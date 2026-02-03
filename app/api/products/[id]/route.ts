@@ -188,13 +188,27 @@ export async function DELETE(
       ]);
       
       console.log('✅ Delete history record created successfully');
-      console.log('📝 History details:', {
+      console.log('📝 History details stored in database:', {
+        id: 'generated-uuid',
         productId: deletedProduct.id,
         productName: deletedProduct.name,
         action: 'DELETE',
         quantity: deletedProduct.quantity,
+        timestamp: new Date().getTime().toString(),
+        userId: 'system',
+        userName: 'System',
         details: `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
       });
+      
+      // Verify the record was inserted
+      const verifyResult = await client.execute(`
+        SELECT * FROM history_items WHERE productId = ? AND action = 'DELETE' ORDER BY timestamp DESC LIMIT 1
+      `, [deletedProduct.id]);
+      
+      console.log('🔍 Verification - Record found in database:', verifyResult.rows.length > 0);
+      if (verifyResult.rows.length > 0) {
+        console.log('📋 Stored record:', verifyResult.rows[0]);
+      }
     } catch (historyError) {
       console.warn('Failed to create delete history:', historyError);
       // Continue even if history fails

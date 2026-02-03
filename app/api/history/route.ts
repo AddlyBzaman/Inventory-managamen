@@ -11,6 +11,19 @@ export async function GET() {
     const result = await client.execute('SELECT * FROM history_items ORDER BY timestamp DESC');
     
     console.log('📜 History result:', result.rows.length, 'records');
+    
+    // Filter DELETE records for verification
+    const deleteRecords = result.rows.filter(r => r.action === 'DELETE');
+    console.log('🗑️ Delete records found:', deleteRecords.length);
+    if (deleteRecords.length > 0) {
+      console.log('📋 Latest delete records:', deleteRecords.slice(0, 3).map(r => ({
+        productName: r.productName,
+        action: r.action,
+        details: r.details,
+        timestamp: r.timestamp
+      })));
+    }
+    
     console.log('📝 All history records:', result.rows.map(r => ({
       id: r.id,
       productId: r.productId,
