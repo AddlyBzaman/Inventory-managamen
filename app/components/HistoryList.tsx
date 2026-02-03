@@ -235,7 +235,13 @@ export function HistoryList({ items }: HistoryListProps) {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className={`text-sm font-medium ${
+                          item.action === 'CREATE' || item.action === 'added' || item.action === 'stock_added' 
+                            ? 'text-green-600' 
+                            : item.action === 'DELETE' || item.action === 'deleted' || item.action === 'stock_subtracted'
+                            ? 'text-red-600'
+                            : 'text-gray-900'
+                        }`}>
                           {item.action === 'CREATE' || item.action === 'added' || item.action === 'stock_added' ? '+' : 
                            item.action === 'DELETE' || item.action === 'deleted' || item.action === 'stock_subtracted' ? '-' : '±'}
                           {Math.abs(item.quantity)}
