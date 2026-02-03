@@ -1,0 +1,9 @@
+{
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/inventory/history/route": "app/api/inventory/history/route.js",
+  "/api/inventory/products/route": "app/api/inventory/products/route.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js"
+}

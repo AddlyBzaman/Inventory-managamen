@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/tubes/Inventory%20Management%20System/app/page.tsx"],"sourcesContent":["'use client'\r\n\r\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/navigation'\r\n\r\nexport default function HomePage() {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    // Always redirect to login first\r\n    router.push('/login')\r\n  }, [router])\r\n\r\n  return (\r\n    <div className=\"min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100\">\r\n      <div className=\"text-center\">\r\n        <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto\"></div>\r\n        <p className=\"mt-4 text-gray-600\">Redirecting...</p>\r\n      </div>\r\n    </div>\r\n  )\r\n}\r\n"],"names":[],"mappings":";;;;;AAEA;AACA;;;AAHA;;;AAKe,SAAS;;IACtB,MAAM,SAAS,IAAA,kJAAS;IAExB,IAAA,0KAAS;8BAAC;YACR,iCAAiC;YACjC,OAAO,IAAI,CAAC;QACd;6BAAG;QAAC;KAAO;IAEX,qBACE,6LAAC;QAAI,WAAU;kBACb,cAAA,6LAAC;YAAI,WAAU;;8BACb,6LAAC;oBAAI,WAAU;;;;;;8BACf,6LAAC;oBAAE,WAAU;8BAAqB;;;;;;;;;;;;;;;;;AAI1C;GAhBwB;;QACP,kJAAS;;;KADF"}},
+    {"offset": {"line": 73, "column": 0}, "map": {"version":3,"sources":["file:///C:/tubes/Inventory%20Management%20System/node_modules/next/navigation.js"],"sourcesContent":["module.exports = require('./dist/client/components/navigation')\n"],"names":[],"mappings":"AAAA,OAAO,OAAO","ignoreList":[0]}}]
+}
