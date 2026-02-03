@@ -6,14 +6,7 @@ export async function GET(request: NextRequest) {
     // Get user from session (simplified - implement proper session management)
     const sessionId = request.cookies.get('session')?.value;
     
-    if (!sessionId) {
-      return NextResponse.json(
-        { success: false, message: 'No session found' },
-        { status: 401 }
-      );
-    }
-
-    // For demo purposes, return a mock user
+    // For now, always return mock user for demo purposes
     // In production, validate session against database
     const mockUser = {
       id: '1',
