@@ -24,7 +24,13 @@ export async function GET() {
 // POST create new product
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔍 POST /api/products - Starting...');
+    
     const productData = await request.json();
+    console.log('📦 Product data received:', productData);
+    
+    console.log('🔗 Database URL:', process.env.TURSO_DATABASE_URL ? 'Set' : 'Not set');
+    console.log('🔐 Auth Token:', process.env.TURSO_AUTH_TOKEN ? 'Set' : 'Not set');
     
     const client = createClient({
       url: process.env.TURSO_DATABASE_URL || '',
@@ -38,6 +44,9 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date().toISOString()
     };
     
+    console.log('✨ New product object:', newProduct);
+    
+    console.log('💾 Executing SQL INSERT...');
     await client.execute(`
       INSERT INTO products (id, name, description, category, quantity, minStock, price, location, sku, unit, createdAt, updatedAt)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -56,9 +65,11 @@ export async function POST(request: NextRequest) {
       newProduct.updatedAt
     ]);
     
+    console.log('✅ Product created successfully!');
     return NextResponse.json({ success: true, data: newProduct });
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error('❌ Error creating product:', error);
+    console.error('❌ Error stack:', error.stack);
     return NextResponse.json(
       { success: false, message: 'Failed to create product', error: error.message },
       { status: 500 }
