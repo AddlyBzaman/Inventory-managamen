@@ -83,3 +83,4 @@
 [01:26:17.363] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
 [01:26:17.363] Browser ERROR   Error fetching history: {}
 [01:26:17.363] Browser ERROR   Error fetching history: {}
+[01:52:47.439] Server  LOG       Reload env: .env.local
