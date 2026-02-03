@@ -128,6 +128,9 @@ export async function DELETE(
   try {
     const { id } = await params;
     
+    console.log('🗑️ DELETE /api/products/{id} - Starting...');
+    console.log('🆔 Product ID to delete:', id);
+    
     // Get product info before delete for history
     const [productToDelete] = await db
       .select()
@@ -135,7 +138,17 @@ export async function DELETE(
       .where(eq(products.id, id))
       .limit(1);
     
+    console.log('📦 Product found:', !!productToDelete);
+    if (productToDelete) {
+      console.log('📦 Product details:', {
+        id: productToDelete.id,
+        name: productToDelete.name,
+        quantity: productToDelete.quantity
+      });
+    }
+    
     if (!productToDelete) {
+      console.log('❌ Product not found in database');
       return NextResponse.json(
         { error: 'Product not found' },
         { status: 404 }

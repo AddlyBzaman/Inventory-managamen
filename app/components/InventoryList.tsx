@@ -305,26 +305,12 @@ export function InventoryList({ items, onUpdate, onDelete, onRefresh }: Inventor
                           <button
                             onClick={() => {
                               if (confirm(`Are you sure you want to delete ${item.name}?`)) {
-                                // Use main API (now fixed!)
-                                fetch(`/api/products/${item.id}`, {
-                                  method: 'DELETE',
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                  if (data.success) {
-                                    onDelete(item.id);
-                                    alert('Item deleted successfully!');
-                                  } else {
-                                    alert(`Failed to delete: ${data.message}`);
-                                  }
-                                })
-                                .catch(error => {
-                                  console.error('Delete error:', error);
-                                  alert('Failed to delete item. Please try again.');
-                                });
+                                console.log(' InventoryList: Deleting item:', item.id);
+                                // Use the main delete handler from App component
+                                onDelete(item.id);
                               }
                             }}
-                            className="text-red-600 hover:text-red-900 p-1 hover:bg-red-50 rounded"
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete item"
                           >
                             <Trash2 className="h-4 w-4" />
