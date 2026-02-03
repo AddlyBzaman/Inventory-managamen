@@ -10,7 +10,14 @@ export async function GET() {
     
     const result = await client.execute('SELECT * FROM history_items ORDER BY timestamp DESC');
     
-    console.log('History result:', result.rows.length, 'records');
+    console.log('📜 History result:', result.rows.length, 'records');
+    console.log('📝 All history records:', result.rows.map(r => ({
+      id: r.id,
+      product: r.productName || r.name,
+      action: r.action,
+      quantity: r.quantity,
+      timestamp: r.timestamp
+    })));
     
     return NextResponse.json({ success: true, data: result.rows });
   } catch (error) {

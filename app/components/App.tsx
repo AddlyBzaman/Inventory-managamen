@@ -70,11 +70,26 @@ export function App() {
 
   const handleDeleteItem = async (id: string) => {
     try {
+      // Get product name before delete for better notification
+      const productToDelete = inventory.find(item => item.id === id);
+      const productName = productToDelete?.name || 'Item';
+      
       await inventoryService.deleteProduct(id);
+      
+      // Remove from local state immediately
       setInventory(inventory.filter(item => item.id !== id));
-      toast.success('Item deleted successfully');
+      
+      // Show clear notification with product name
+      toast.success(`✅ ${productName} berhasil dihapus!`);
+      
+      // Auto refresh data after 1 second to ensure sync
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      
     } catch (error) {
-      toast.error('Failed to delete item');
+      console.error('Delete error:', error);
+      toast.error(`❌ Gagal menghapus item. Silakan coba lagi.`);
     }
   };
 

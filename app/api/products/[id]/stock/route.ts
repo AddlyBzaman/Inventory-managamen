@@ -82,6 +82,8 @@ export async function POST(
       historyRecord.details
     ]);
 
+    console.log('✅ Stock history record created:', historyRecord);
+
     return NextResponse.json({
       success: true,
       data: {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
 import { products } from '../../../../lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { createClient } from '@libsql/client';
 
 // GET single product
 export async function GET(
@@ -77,19 +78,59 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const [deletedProduct] = await db
-      .delete(products)
+    
+    // Get product info before delete for history
+    const [productToDelete] = await db
+      .select()
+      .from(products)
       .where(eq(products.id, id))
-      .returning();
-
-    if (!deletedProduct) {
+      .limit(1);
+    
+    if (!productToDelete) {
       return NextResponse.json(
         { error: 'Product not found' },
         { status: 404 }
       );
     }
+    
+    // Delete the product
+    const [deletedProduct] = await db
+      .delete(products)
+      .where(eq(products.id, id))
+      .returning();
 
-    return NextResponse.json({ message: 'Product deleted successfully' });
+    // Add history record for deletion
+    try {
+      const client = createClient({
+        url: process.env.TURSO_DATABASE_URL || '',
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      });
+      
+      await client.execute(`
+        INSERT INTO history_items (id, product_id, action, quantity_before, quantity_after, user_id, timestamp, description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        crypto.randomUUID(),
+        deletedProduct.id,
+        'DELETE',
+        deletedProduct.quantity,
+        0,
+        'system', // TODO: Get actual user ID from auth
+        new Date().toISOString(),
+        `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
+      ]);
+      
+      console.log('✅ Delete history record created');
+    } catch (historyError) {
+      console.warn('Failed to create delete history:', historyError);
+      // Continue even if history fails
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Product deleted successfully',
+      data: deletedProduct 
+    });
   } catch (error) {
     console.error('Error deleting product:', error);
     return NextResponse.json(
