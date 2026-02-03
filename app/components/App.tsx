@@ -21,6 +21,13 @@ export function App() {
     loadData();
   }, []);
 
+  // Refresh history when switching to history view
+  useEffect(() => {
+    if (currentView === 'history') {
+      refreshHistory();
+    }
+  }, [currentView]);
+
   const loadData = async () => {
     try {
       console.log('🔄 Starting data load...');
@@ -50,6 +57,19 @@ export function App() {
     }
   };
 
+  // Refresh history separately
+  const refreshHistory = async () => {
+    try {
+      console.log('🔄 Refreshing history data...');
+      const historyData = await inventoryService.getAllHistory();
+      console.log('✅ History refreshed:', historyData.length, 'records');
+      setHistory(historyData);
+    } catch (error) {
+      console.error('❌ Refresh history error:', error);
+      toast.error('Gagal refresh data history');
+    }
+  };
+
   const handleAddItem = async (item: Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>) => {
     // This function is now handled by the dedicated add page
     // Redirect to add page instead of inline form
@@ -65,6 +85,9 @@ export function App() {
       setInventory(inventory.map(item => 
         item.id === id ? { ...item, ...updates } : item
       ));
+      
+      // Refresh history to show update record
+      await refreshHistory();
       
       toast.success(`✅ Item berhasil diperbarui!`);
     } catch (error) {
@@ -89,6 +112,9 @@ export function App() {
       
       // Remove from local state immediately
       setInventory(inventory.filter(item => item.id !== id));
+      
+      // Refresh history to show delete record
+      await refreshHistory();
       
       // Show clear notification with product name
       toast.success(`✅ ${productName} berhasil dihapus!`);
