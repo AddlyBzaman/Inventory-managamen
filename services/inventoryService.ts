@@ -6,9 +6,9 @@ class InventoryService {
 
   async getAllProducts(): Promise<InventoryItem[]> {
     try {
-      console.log('🔄 Fetching products from:', `${this.API_BASE}/inventory/products`);
+      console.log('🔄 Fetching products from:', `${this.API_BASE}/api/products`);
       
-      const response = await fetch(`${this.API_BASE}/inventory/products`, {
+      const response = await fetch(`${this.API_BASE}/api/products`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -40,7 +40,7 @@ class InventoryService {
 
   async getAllHistory(): Promise<HistoryItem[]> {
     try {
-      const response = await fetch(`${this.API_BASE}/inventory/history`, {
+      const response = await fetch(`${this.API_BASE}/api/history`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -63,7 +63,7 @@ class InventoryService {
 
   async createProduct(productData: Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<InventoryItem> {
     try {
-      const response = await fetch(`${this.API_BASE}/inventory/products`, {
+      const response = await fetch(`${this.API_BASE}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ class InventoryService {
 
   async updateProduct(id: string, productData: Partial<Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>>): Promise<void> {
     try {
-      const response = await fetch(`${this.API_BASE}/inventory/products/${id}`, {
+      const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ class InventoryService {
 
   async deleteProduct(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.API_BASE}/inventory/products/${id}`, {
+      const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
         method: 'DELETE',
         cache: 'no-store'
       });

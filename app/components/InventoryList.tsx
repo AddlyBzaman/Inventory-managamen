@@ -219,7 +219,7 @@ export function InventoryList({ items, onUpdate, onDelete, onRefresh }: Inventor
                               const quantity = prompt(`Tambah stok untuk ${item.name}:`, '10');
                               if (quantity && !isNaN(Number(quantity)) && Number(quantity) > 0) {
                                 const notes = prompt('Catatan (opsional):', 'Pembelian dari supplier');
-                                fetch(`/api/inventory/products/${item.id}/stock`, {
+                                fetch(`/api/products/${item.id}/stock`, {
                                   method: 'POST',
                                   headers: { 'Content-Type': 'application/json' },
                                   body: JSON.stringify({
@@ -256,7 +256,7 @@ export function InventoryList({ items, onUpdate, onDelete, onRefresh }: Inventor
                               const quantity = prompt(`Jual ${item.name}:`, '1');
                               if (quantity && !isNaN(Number(quantity)) && Number(quantity) > 0) {
                                 const notes = prompt('Catatan (opsional):', 'Pelanggan');
-                                fetch(`/api/inventory/products/${item.id}/stock`, {
+                                fetch(`/api/products/${item.id}/stock`, {
                                   method: 'POST',
                                   headers: { 'Content-Type': 'application/json' },
                                   body: JSON.stringify({
@@ -306,7 +306,7 @@ export function InventoryList({ items, onUpdate, onDelete, onRefresh }: Inventor
                             onClick={() => {
                               if (confirm(`Are you sure you want to delete ${item.name}?`)) {
                                 // Use main API (now fixed!)
-                                fetch(`/api/inventory/products/${item.id}`, {
+                                fetch(`/api/products/${item.id}`, {
                                   method: 'DELETE',
                                 })
                                 .then(response => response.json())
