@@ -4,11 +4,20 @@ import { createClient } from '@libsql/client';
 
 export async function GET(request: NextRequest) {
   try {
-    // Debug: Log all cookies
+    // Debug: Log all cookies and headers
     console.log('All cookies:', request.cookies.getAll());
+    console.log('Auth header:', request.headers.get('Authorization'));
     
-    // Get token from cookie
-    const token = request.cookies.get('token')?.value;
+    // Get token from cookie first, then from Authorization header
+    let token = request.cookies.get('token')?.value;
+    
+    // Fallback to Authorization header (Bearer token)
+    if (!token) {
+      const authHeader = request.headers.get('Authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
     
     console.log('Token found:', !!token);
     console.log('Token value preview:', token ? token.substring(0, 20) + '...' : 'null');

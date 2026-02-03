@@ -30,6 +30,11 @@ class AuthService {
         return null;
       }
 
+      // Store token in localStorage as fallback
+      if (data.token) {
+        localStorage.setItem('auth-token', data.token);
+      }
+
       return data.user;
       
     } catch (error) {
@@ -40,6 +45,9 @@ class AuthService {
 
   async logout(): Promise<void> {
     try {
+      // Clear localStorage token
+      localStorage.removeItem('auth-token');
+      
       await fetch(`${this.API_BASE}/auth/logout`, {
         method: 'POST',
         cache: 'no-store'
@@ -51,7 +59,13 @@ class AuthService {
 
   async getCurrentUser(): Promise<User | null> {
     try {
+      // Try to get token from localStorage first
+      const token = localStorage.getItem('auth-token');
+      
       const response = await fetch(`${this.API_BASE}/auth/me`, {
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
         cache: 'no-store'
       });
       const data = await response.json();
