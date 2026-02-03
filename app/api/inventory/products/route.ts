@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../../lib/db';
-import { products, historyItems } from '../../../../lib/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { createClient } from '@libsql/client';
 
 export async function GET() {
   try {
-    const allProducts = await db.select().from(products);
-    return NextResponse.json({ success: true, data: allProducts });
+    const client = createClient({
+      url: process.env.TURSO_DATABASE_URL || '',
+      authToken: process.env.TURSO_AUTH_TOKEN || '',
+    });
+
+    const allProducts = await client.execute('SELECT * FROM products ORDER BY createdAt DESC');
+    
+    return NextResponse.json({ success: true, data: allProducts.rows });
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
@@ -20,6 +24,11 @@ export async function POST(request: NextRequest) {
   try {
     const productData = await request.json();
     
+    const client = createClient({
+      url: process.env.TURSO_DATABASE_URL || '',
+      authToken: process.env.TURSO_AUTH_TOKEN || '',
+    });
+    
     const newProduct = {
       id: crypto.randomUUID(),
       ...productData,
@@ -27,7 +36,24 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date().toISOString()
     };
     
-    await db.insert(products).values(newProduct);
+    // Insert product
+    await client.execute(`
+      INSERT INTO products (id, name, description, category, quantity, minStock, price, location, sku, unit, createdAt, updatedAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      newProduct.id,
+      newProduct.name,
+      newProduct.description,
+      newProduct.category,
+      newProduct.quantity,
+      newProduct.minStock,
+      newProduct.price,
+      newProduct.location,
+      newProduct.sku,
+      newProduct.unit,
+      newProduct.createdAt,
+      newProduct.updatedAt
+    ]);
     
     // Add history record
     const historyRecord = {
@@ -42,7 +68,20 @@ export async function POST(request: NextRequest) {
       details: `Added ${newProduct.quantity} ${newProduct.unit} of ${newProduct.name}`
     };
     
-    await db.insert(historyItems).values(historyRecord);
+    await client.execute(`
+      INSERT INTO historyItems (id, productId, productName, action, quantity, timestamp, userId, userName, details)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      historyRecord.id,
+      historyRecord.productId,
+      historyRecord.productName,
+      historyRecord.action,
+      historyRecord.quantity,
+      historyRecord.timestamp,
+      historyRecord.userId,
+      historyRecord.userName,
+      historyRecord.details
+    ]);
     
     return NextResponse.json({ success: true, data: newProduct });
   } catch (error) {
