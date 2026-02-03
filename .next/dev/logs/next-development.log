@@ -26,3 +26,41 @@
 [00:43:44.037] Server  LOG       Reload env: .env
 [00:43:53.170] Server  LOG       Reload env: .env
 [00:43:58.638] Server  LOG       Reload env: .env
+[01:12:28.656] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:12:35.364] Browser LOG     🔄 Starting data load...
+[01:12:35.364] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:12:35.364] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:12:35.364] Browser LOG     🔄 Starting data load...
+[01:12:35.364] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:12:35.364] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:12:37.684] Browser LOG     📡 Response status: 404
+[01:12:37.684] Browser LOG     📡 Response ok: false
+[01:12:37.684] Browser ERROR   ❌ Error fetching products: {}
+[01:12:37.685] Browser ERROR   ❌ Load data error: {}
+[01:12:37.685] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:12:37.685] Browser LOG     📡 Response status: 404
+[01:12:37.685] Browser LOG     📡 Response ok: false
+[01:12:37.685] Browser ERROR   ❌ Error fetching products: {}
+[01:12:37.685] Browser ERROR   ❌ Load data error: {}
+[01:12:37.685] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:12:37.685] Browser ERROR   Error fetching history: {}
+[01:12:37.685] Browser ERROR   Error fetching history: {}
+[01:14:56.209] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:14:56.397] Browser LOG     🔄 Starting data load...
+[01:14:56.397] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:14:56.397] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:14:56.397] Browser LOG     🔄 Starting data load...
+[01:14:56.397] Browser LOG     🌐 API_BASE: http://localhost:3000/api
+[01:14:56.398] Browser LOG     🔄 Fetching products from: http://localhost:3000/api/api/products
+[01:14:56.950] Browser LOG     📡 Response status: 404
+[01:14:56.950] Browser LOG     📡 Response ok: false
+[01:14:56.950] Browser ERROR   ❌ Error fetching products: {}
+[01:14:56.950] Browser ERROR   ❌ Load data error: {}
+[01:14:56.950] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:14:56.950] Browser LOG     📡 Response status: 404
+[01:14:56.950] Browser LOG     📡 Response ok: false
+[01:14:56.950] Browser ERROR   ❌ Error fetching products: {}
+[01:14:56.950] Browser ERROR   ❌ Load data error: {}
+[01:14:56.950] Browser ERROR   ❌ Error details: {"message":"HTTP error! status: 404","name":"Error","stack":"Error: HTTP error! status: 404\n    at InventoryService.getAllProducts (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3415:23)\n    at async Promise.all (index 0)\n    at async loadData (http://localhost:3000/_next/static/chunks/_cfe3b107._.js:3553:50)"}
+[01:14:57.078] Browser ERROR   Error fetching history: {}
+[01:14:57.078] Browser ERROR   Error fetching history: {}

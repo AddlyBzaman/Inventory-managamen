@@ -1672,7 +1672,7 @@ function InventoryList({ items, onUpdate, onDelete, onRefresh }) {
                                                                 const quantity = prompt(`Tambah stok untuk ${item.name}:`, '10');
                                                                 if (quantity && !isNaN(Number(quantity)) && Number(quantity) > 0) {
                                                                     const notes = prompt('Catatan (opsional):', 'Pembelian dari supplier');
-                                                                    fetch(`/api/inventory/products/${item.id}/stock`, {
+                                                                    fetch(`/api/products/${item.id}/stock`, {
                                                                         method: 'POST',
                                                                         headers: {
                                                                             'Content-Type': 'application/json'
@@ -1715,7 +1715,7 @@ function InventoryList({ items, onUpdate, onDelete, onRefresh }) {
                                                                 const quantity = prompt(`Jual ${item.name}:`, '1');
                                                                 if (quantity && !isNaN(Number(quantity)) && Number(quantity) > 0) {
                                                                     const notes = prompt('Catatan (opsional):', 'Pelanggan');
-                                                                    fetch(`/api/inventory/products/${item.id}/stock`, {
+                                                                    fetch(`/api/products/${item.id}/stock`, {
                                                                         method: 'POST',
                                                                         headers: {
                                                                             'Content-Type': 'application/json'
@@ -1780,7 +1780,7 @@ function InventoryList({ items, onUpdate, onDelete, onRefresh }) {
                                                             onClick: ()=>{
                                                                 if (confirm(`Are you sure you want to delete ${item.name}?`)) {
                                                                     // Use main API (now fixed!)
-                                                                    fetch(`/api/inventory/products/${item.id}`, {
+                                                                    fetch(`/api/products/${item.id}`, {
                                                                         method: 'DELETE'
                                                                     }).then((response)=>response.json()).then((data)=>{
                                                                         if (data.success) {
@@ -3400,8 +3400,8 @@ class InventoryService {
     API_BASE = ("TURBOPACK compile-time value", "http://localhost:3000/api") || '';
     async getAllProducts() {
         try {
-            console.log('🔄 Fetching products from:', `${this.API_BASE}/inventory/products`);
-            const response = await fetch(`${this.API_BASE}/inventory/products`, {
+            console.log('🔄 Fetching products from:', `${this.API_BASE}/api/products`);
+            const response = await fetch(`${this.API_BASE}/api/products`, {
                 cache: 'no-store',
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -3427,7 +3427,7 @@ class InventoryService {
     }
     async getAllHistory() {
         try {
-            const response = await fetch(`${this.API_BASE}/inventory/history`, {
+            const response = await fetch(`${this.API_BASE}/api/history`, {
                 cache: 'no-store',
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -3447,7 +3447,7 @@ class InventoryService {
     }
     async createProduct(productData) {
         try {
-            const response = await fetch(`${this.API_BASE}/inventory/products`, {
+            const response = await fetch(`${this.API_BASE}/api/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -3467,7 +3467,7 @@ class InventoryService {
     }
     async updateProduct(id, productData) {
         try {
-            const response = await fetch(`${this.API_BASE}/inventory/products/${id}`, {
+            const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -3486,7 +3486,7 @@ class InventoryService {
     }
     async deleteProduct(id) {
         try {
-            const response = await fetch(`${this.API_BASE}/inventory/products/${id}`, {
+            const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
                 method: 'DELETE',
                 cache: 'no-store'
             });

@@ -52,8 +52,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 ;
 async function GET(request) {
     try {
-        // For now, we'll implement a simple session check
-        // In production, you should use proper session management (JWT, cookies, etc.)
         // Get user from session (simplified - implement proper session management)
         const sessionId = request.cookies.get('session')?.value;
         if (!sessionId) {
