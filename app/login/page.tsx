@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Eye, EyeOff, LogIn, Package } from 'lucide-react'
+import { authService } from '../../services/authService'
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -21,35 +22,19 @@ export default function LoginPage() {
     setLoginError('')
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
+      // Use authService instead of direct fetch
+      const userData = await authService.login(formData.username, formData.password)
+      
+      if (userData) {
         toast.success('Login successful!')
-        // Token is stored in httpOnly cookie, no need to store in localStorage
-        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('user', JSON.stringify(userData))
         
         // Redirect to dashboard
         router.push('/dashboard')
+        router.refresh()
       } else {
-        // Show specific error message based on error type
-        if (data.error === 'USER_NOT_FOUND') {
-          setLoginError('Username tidak ditemukan atau akun tidak aktif')
-          toast.error('Username tidak ditemukan atau akun tidak aktif')
-        } else if (data.error === 'INVALID_PASSWORD') {
-          setLoginError('Password salah. Silakan coba lagi.')
-          toast.error('Password salah. Silakan coba lagi.')
-        } else {
-          setLoginError(data.message || 'Login gagal. Silakan coba lagi.')
-          toast.error(data.message || 'Login gagal. Silakan coba lagi.')
-        }
+        setLoginError('Invalid username or password')
+        toast.error('Login failed')
       }
     } catch (error) {
       console.error('Login error:', error)

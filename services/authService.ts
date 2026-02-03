@@ -11,8 +11,7 @@ export interface User {
 }
 
 class AuthService {
-  private readonly API_BASE = process.env.NEXT_PUBLIC_API_URL || 
-    (typeof window !== 'undefined' ? '/api' : '');
+  private readonly API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 
   async login(username: string, password: string): Promise<User | null> {
     try {

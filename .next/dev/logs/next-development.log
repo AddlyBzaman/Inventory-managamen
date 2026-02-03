@@ -84,3 +84,4 @@
 [01:26:17.363] Browser ERROR   Error fetching history: {}
 [01:26:17.363] Browser ERROR   Error fetching history: {}
 [01:52:47.439] Server  LOG       Reload env: .env.local
+[02:10:15.151] Server  LOG     ✓ Compiled in 427ms
