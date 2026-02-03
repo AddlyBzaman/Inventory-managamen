@@ -109,18 +109,23 @@ class InventoryService {
 
   async deleteProduct(id: string): Promise<void> {
     try {
+      console.log('🗑️ Deleting product:', id);
       const response = await fetch(`${this.API_BASE}/products/${id}`, {
         method: 'DELETE',
         cache: 'no-store'
       });
       
+      console.log('📡 Delete response status:', response.status);
       const data = await response.json();
+      console.log('📦 Delete response data:', data);
       
       if (!data.success) {
         throw new Error('Failed to delete product');
       }
+      
+      console.log('✅ Product deleted successfully');
     } catch (error) {
-      console.error('Error deleting product:', error);
+      console.error('❌ Error deleting product:', error);
       throw error;
     }
   }

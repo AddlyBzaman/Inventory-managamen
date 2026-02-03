@@ -75,11 +75,17 @@ export function App() {
 
   const handleDeleteItem = async (id: string) => {
     try {
+      console.log('🗑️ Frontend: Starting delete for:', id);
+      
       // Get product name before delete for better notification
       const productToDelete = inventory.find(item => item.id === id);
       const productName = productToDelete?.name || 'Item';
       
+      console.log('📦 Product to delete:', productName);
+      
       await inventoryService.deleteProduct(id);
+      
+      console.log('✅ Delete service completed');
       
       // Remove from local state immediately
       setInventory(inventory.filter(item => item.id !== id));
@@ -89,11 +95,12 @@ export function App() {
       
       // Auto refresh data after 1 second to ensure sync
       setTimeout(() => {
+        console.log('🔄 Auto refreshing page...');
         window.location.reload();
       }, 1000);
       
     } catch (error) {
-      console.error('Delete error:', error);
+      console.error('❌ Frontend delete error:', error);
       toast.error(`❌ Gagal menghapus item. Silakan coba lagi.`);
     }
   };
