@@ -13,10 +13,14 @@ export async function GET() {
     console.log('📜 History result:', result.rows.length, 'records');
     console.log('📝 All history records:', result.rows.map(r => ({
       id: r.id,
-      product: r.productName || r.name,
+      productId: r.productId,
+      productName: r.productName,
       action: r.action,
       quantity: r.quantity,
-      timestamp: r.timestamp
+      timestamp: r.timestamp,
+      userId: r.userId,
+      userName: r.userName,
+      details: r.details
     })));
     
     return NextResponse.json({ success: true, data: result.rows });

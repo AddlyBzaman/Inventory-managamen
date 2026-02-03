@@ -43,10 +43,29 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     
+    console.log('🔍 PUT /api/products/{id} - Starting...');
+    console.log('📦 Update data received:', body);
+    
+    // Get current product before update for history
+    const [currentProduct] = await db
+      .select()
+      .from(products)
+      .where(eq(products.id, id))
+      .limit(1);
+    
+    if (!currentProduct) {
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+    
     const updatedData = {
       ...body,
       updatedAt: new Date().toISOString()
     };
+
+    console.log('✨ Updated data:', updatedData);
 
     const [updatedProduct] = await db
       .update(products)
@@ -61,11 +80,41 @@ export async function PUT(
       );
     }
 
+    // Add history record for update
+    try {
+      const client = createClient({
+        url: process.env.TURSO_DATABASE_URL || '',
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      });
+      
+      await client.execute(`
+        INSERT INTO history_items (id, productId, productName, action, quantity, timestamp, userId, userName, details)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        crypto.randomUUID(),
+        updatedProduct.id,
+        updatedProduct.name,
+        'UPDATE',
+        updatedProduct.quantity,
+        new Date().getTime().toString(), // Use numeric timestamp for schema
+        'system', // TODO: Get actual user ID from auth
+        'System',
+        `Memperbarui produk: ${updatedProduct.name}`
+      ]);
+      
+      console.log('✅ Update history record created');
+    } catch (historyError) {
+      console.warn('Failed to create update history:', historyError);
+      // Continue even if history fails
+    }
+
+    console.log('✅ Product updated successfully!');
     return NextResponse.json(updatedProduct);
   } catch (error) {
-    console.error('Error updating product:', error);
+    console.error('❌ Error updating product:', error);
+    console.error('❌ Error stack:', error.stack);
     return NextResponse.json(
-      { error: 'Failed to update product' },
+      { success: false, error: 'Failed to update product', message: error.message },
       { status: 500 }
     );
   }
@@ -115,7 +164,7 @@ export async function DELETE(
         deletedProduct.name,
         'DELETE',
         deletedProduct.quantity,
-        new Date().toISOString(),
+        new Date().getTime().toString(), // Use numeric timestamp for schema
         'system', // TODO: Get actual user ID from auth
         'System',
         `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`

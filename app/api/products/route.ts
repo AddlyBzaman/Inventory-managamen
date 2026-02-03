@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       newProduct.name,
       'CREATE',
       newProduct.quantity,
-      new Date().toISOString(),
+      new Date().getTime().toString(), // Use numeric timestamp for schema
       'system', // TODO: Get actual user ID from auth
       'System',
       `Menambahkan produk baru: ${newProduct.name} (${newProduct.quantity} ${newProduct.unit})`

@@ -58,13 +58,18 @@ export function App() {
 
   const handleUpdateItem = async (id: string, updates: Partial<InventoryItem>) => {
     try {
+      console.log('🔄 Updating item:', id, updates);
       await inventoryService.updateProduct(id, updates);
+      
+      // Update local state
       setInventory(inventory.map(item => 
         item.id === id ? { ...item, ...updates } : item
       ));
-      toast.success('Item updated successfully');
+      
+      toast.success(`✅ Item berhasil diperbarui!`);
     } catch (error) {
-      toast.error('Failed to update item');
+      console.error('❌ Update error:', error);
+      toast.error(`❌ Gagal memperbarui item. Silakan coba lagi.`);
     }
   };
 

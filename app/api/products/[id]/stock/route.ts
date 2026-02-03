@@ -61,7 +61,7 @@ export async function POST(
       productName: currentProduct.name,
       action: type === 'add' ? 'stock_added' : 'stock_subtracted',
       quantity: quantity,
-      timestamp: Date.now().toString(),
+      timestamp: new Date().getTime().toString(), // Use numeric timestamp for schema
       userId: 'system',
       userName: 'System',
       details: `${type === 'add' ? 'Added' : 'Subtracted'} ${quantity} units. ${notes || ''}`
