@@ -4,8 +4,14 @@ import { createClient } from '@libsql/client';
 
 export async function GET(request: NextRequest) {
   try {
+    // Debug: Log all cookies
+    console.log('All cookies:', request.cookies.getAll());
+    
     // Get token from cookie
     const token = request.cookies.get('token')?.value;
+    
+    console.log('Token found:', !!token);
+    console.log('Token value preview:', token ? token.substring(0, 20) + '...' : 'null');
     
     if (!token) {
       return NextResponse.json(
@@ -16,6 +22,8 @@ export async function GET(request: NextRequest) {
 
     // Verify JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret-change-in-production') as any;
+    
+    console.log('Token decoded:', !!decoded);
     
     if (!decoded) {
       return NextResponse.json(
