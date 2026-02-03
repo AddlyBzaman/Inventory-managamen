@@ -96,7 +96,7 @@ export async function PUT(
         updatedProduct.name,
         'UPDATE',
         updatedProduct.quantity,
-        new Date().getTime().toString(), // Use numeric timestamp for schema
+        new Date().getTime(), // Send as numeric for numeric() column
         'system', // TODO: Get actual user ID from auth
         'System',
         `Memperbarui produk: ${updatedProduct.name}`
@@ -159,13 +159,8 @@ export async function DELETE(
       );
     }
     
-    // Delete the product
-    const [deletedProduct] = await db
-      .delete(products)
-      .where(eq(products.id, id))
-      .returning();
-
-    // Add history record for deletion
+    // IMPORTANT: Create history record BEFORE deleting the product
+    // to avoid foreign key constraint violation
     try {
       console.log('🔄 Starting delete history creation...');
       
@@ -175,18 +170,18 @@ export async function DELETE(
       });
       
       const historyId = crypto.randomUUID();
-      const timestamp = new Date().getTime().toString();
+      const timestamp = new Date().getTime(); // Remove .toString() - send as numeric
       
       console.log('📝 Preparing history record:', {
         historyId,
-        productId: deletedProduct.id,
-        productName: deletedProduct.name,
+        productId: productToDelete.id,
+        productName: productToDelete.name,
         action: 'DELETE',
-        quantity: deletedProduct.quantity,
-        timestamp,
+        quantity: productToDelete.quantity,
+        timestamp: timestamp, // Numeric value for numeric() column
         userId: 'system',
         userName: 'System',
-        details: `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
+        details: `Menghapus produk: ${productToDelete.name} (${productToDelete.quantity} ${productToDelete.unit})`
       });
       
       await client.execute(`
@@ -194,14 +189,14 @@ export async function DELETE(
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `, [
         historyId,
-        deletedProduct.id,
-        deletedProduct.name,
+        productToDelete.id,
+        productToDelete.name,
         'DELETE',
-        deletedProduct.quantity,
+        productToDelete.quantity,
         timestamp,
         'system',
         'System',
-        `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
+        `Menghapus produk: ${productToDelete.name} (${productToDelete.quantity} ${productToDelete.unit})`
       ]);
       
       console.log('✅ Delete history record created successfully');
@@ -209,7 +204,7 @@ export async function DELETE(
       // Verify the record was inserted
       const verifyResult = await client.execute(`
         SELECT * FROM history_items WHERE productId = ? AND action = 'DELETE' ORDER BY timestamp DESC LIMIT 1
-      `, [deletedProduct.id]);
+      `, [productToDelete.id]);
       
       console.log('🔍 Verification - Record found in database:', verifyResult.rows.length > 0);
       if (verifyResult.rows.length > 0) {
@@ -224,8 +219,14 @@ export async function DELETE(
         message: historyError.message,
         stack: historyError.stack
       });
-      // Continue even if history fails - but log the error
+      // Continue with delete even if history fails - but log the error
     }
+
+    // Now delete the product (after history is created)
+    const [deletedProduct] = await db
+      .delete(products)
+      .where(eq(products.id, id))
+      .returning();
 
     return NextResponse.json({ 
       success: true, 
