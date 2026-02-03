@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify JWT token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret-change-in-production') as any;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || process.env.SESSION_SECRET || 'fallback-secret-change-in-production') as any;
     
     console.log('Token decoded:', !!decoded);
     

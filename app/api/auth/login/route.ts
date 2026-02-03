@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         username: user.username,
         role: user.role
       },
-      process.env.JWT_SECRET || 'fallback-secret-change-in-production',
+      process.env.JWT_SECRET || process.env.SESSION_SECRET || 'fallback-secret-change-in-production',
       { expiresIn: '7d' }
     );
     

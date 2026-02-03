@@ -57,16 +57,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log('🔍 Checking authentication...');
         const currentUser = await authService.getCurrentUser();
+        console.log('👤 Current user result:', currentUser);
+        
         if (currentUser) {
           setIsAuthenticated(true);
           setUser(currentUser);
           setSessionTimers();
+          console.log('✅ User authenticated successfully');
+        } else {
+          console.log('❌ No user found, staying unauthenticated');
         }
       } catch (error) {
-        console.error('Auth check error:', error);
-        // Clear invalid session
-        await authService.logout();
+        console.error('❌ Auth check error:', error);
+        // Don't auto logout on error, just stay unauthenticated
+        setIsAuthenticated(false);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -114,16 +121,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshToken = async (): Promise<boolean> => {
     try {
+      console.log('🔄 Refreshing token...');
       const currentUser = await authService.getCurrentUser();
+      console.log('👤 Refresh token result:', currentUser);
+      
       if (currentUser) {
         setUser(currentUser);
         setSessionTimers();
+        console.log('✅ Token refreshed successfully');
         return true;
       }
+      console.log('❌ Token refresh failed - no user');
       return false;
     } catch (error) {
-      console.error('Token refresh error:', error);
-      await logout();
+      console.error('❌ Token refresh error:', error);
+      // Don't auto logout on refresh error
       return false;
     }
   };
