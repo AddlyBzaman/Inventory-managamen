@@ -87,6 +87,9 @@ class InventoryService {
 
   async updateProduct(id: string, productData: Partial<Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>>): Promise<void> {
     try {
+      console.log('🔄 Updating product:', id);
+      console.log('📦 Update data:', productData);
+      
       const response = await fetch(`${this.API_BASE}/products/${id}`, {
         method: 'PUT',
         headers: {
@@ -96,13 +99,18 @@ class InventoryService {
         cache: 'no-store'
       });
       
+      console.log('📡 Update response status:', response.status);
       const data = await response.json();
+      console.log('📦 Update response data:', data);
       
       if (!data.success) {
-        throw new Error('Failed to update product');
+        console.log('❌ Update failed:', data.error || data.message);
+        throw new Error(data.error || data.message || 'Failed to update product');
       }
+      
+      console.log('✅ Product updated successfully');
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error('❌ Error updating product:', error);
       throw error;
     }
   }
