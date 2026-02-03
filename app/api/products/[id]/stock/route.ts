@@ -3,11 +3,11 @@ import { createClient } from '@libsql/client';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { quantity, type, notes } = await request.json();
-    const productId = params.id;
+    const { id: productId } = await params;
 
     const client = createClient({
       url: process.env.TURSO_DATABASE_URL || '',
