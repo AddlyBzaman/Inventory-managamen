@@ -68,16 +68,17 @@ export async function POST(request: NextRequest) {
     // Add history record for product creation
     console.log('📝 Adding history record...');
     await client.execute(`
-      INSERT INTO history_items (id, product_id, action, quantity_before, quantity_after, user_id, timestamp, description)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO history_items (id, productId, productName, action, quantity, timestamp, userId, userName, details)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       crypto.randomUUID(),
       newProduct.id,
+      newProduct.name,
       'CREATE',
-      0,
       newProduct.quantity,
-      'system', // TODO: Get actual user ID from auth
       new Date().toISOString(),
+      'system', // TODO: Get actual user ID from auth
+      'System',
       `Menambahkan produk baru: ${newProduct.name} (${newProduct.quantity} ${newProduct.unit})`
     ]);
     

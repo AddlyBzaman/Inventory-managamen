@@ -107,16 +107,17 @@ export async function DELETE(
       });
       
       await client.execute(`
-        INSERT INTO history_items (id, product_id, action, quantity_before, quantity_after, user_id, timestamp, description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO history_items (id, productId, productName, action, quantity, timestamp, userId, userName, details)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `, [
         crypto.randomUUID(),
         deletedProduct.id,
+        deletedProduct.name,
         'DELETE',
         deletedProduct.quantity,
-        0,
-        'system', // TODO: Get actual user ID from auth
         new Date().toISOString(),
+        'system', // TODO: Get actual user ID from auth
+        'System',
         `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
       ]);
       
