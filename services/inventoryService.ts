@@ -87,7 +87,7 @@ class InventoryService {
 
   async updateProduct(id: string, productData: Partial<Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>>): Promise<void> {
     try {
-      const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
+      const response = await fetch(`${this.API_BASE}/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ class InventoryService {
 
   async deleteProduct(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.API_BASE}/api/products/${id}`, {
+      const response = await fetch(`${this.API_BASE}/products/${id}`, {
         method: 'DELETE',
         cache: 'no-store'
       });
