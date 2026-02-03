@@ -65,7 +65,23 @@ export async function POST(request: NextRequest) {
       newProduct.updatedAt
     ]);
     
-    console.log('✅ Product created successfully!');
+    // Add history record for product creation
+    console.log('📝 Adding history record...');
+    await client.execute(`
+      INSERT INTO history_items (id, product_id, action, quantity_before, quantity_after, user_id, timestamp, description)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      crypto.randomUUID(),
+      newProduct.id,
+      'CREATE',
+      0,
+      newProduct.quantity,
+      'system', // TODO: Get actual user ID from auth
+      new Date().toISOString(),
+      `Menambahkan produk baru: ${newProduct.name} (${newProduct.quantity} ${newProduct.unit})`
+    ]);
+    
+    console.log('✅ Product and history created successfully!');
     return NextResponse.json({ success: true, data: newProduct });
   } catch (error) {
     console.error('❌ Error creating product:', error);
