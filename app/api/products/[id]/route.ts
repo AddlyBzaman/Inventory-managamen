@@ -183,7 +183,14 @@ export async function DELETE(
         `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
       ]);
       
-      console.log('✅ Delete history record created');
+      console.log('✅ Delete history record created successfully');
+      console.log('📝 History details:', {
+        productId: deletedProduct.id,
+        productName: deletedProduct.name,
+        action: 'DELETE',
+        quantity: deletedProduct.quantity,
+        details: `Menghapus produk: ${deletedProduct.name} (${deletedProduct.quantity} ${deletedProduct.unit})`
+      });
     } catch (historyError) {
       console.warn('Failed to create delete history:', historyError);
       // Continue even if history fails

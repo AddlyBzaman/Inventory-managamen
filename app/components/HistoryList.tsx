@@ -165,9 +165,11 @@ export function HistoryList({ items }: HistoryListProps) {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Actions</option>
-              <option value="added">Added</option>
-              <option value="updated">Updated</option>
-              <option value="deleted">Deleted</option>
+              <option value="CREATE">Items Added</option>
+              <option value="UPDATE">Items Updated</option>
+              <option value="DELETE">Items Deleted</option>
+              <option value="stock_added">Stock Added</option>
+              <option value="stock_subtracted">Stock Reduced</option>
             </select>
           </div>
         </div>

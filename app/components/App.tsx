@@ -63,6 +63,11 @@ export function App() {
       console.log('🔄 Refreshing history data...');
       const historyData = await inventoryService.getAllHistory();
       console.log('✅ History refreshed:', historyData.length, 'records');
+      console.log('📝 Latest records:', historyData.slice(0, 3).map(h => ({
+        action: h.action,
+        productName: h.productName,
+        details: h.details
+      })));
       setHistory(historyData);
     } catch (error) {
       console.error('❌ Refresh history error:', error);
@@ -114,16 +119,17 @@ export function App() {
       setInventory(inventory.filter(item => item.id !== id));
       
       // Refresh history to show delete record
+      console.log('🔄 Refreshing history after delete...');
       await refreshHistory();
       
       // Show clear notification with product name
       toast.success(`✅ ${productName} berhasil dihapus!`);
       
-      // Auto refresh data after 1 second to ensure sync
+      // Small delay to ensure history is updated before page reload
       setTimeout(() => {
         console.log('🔄 Auto refreshing page...');
         window.location.reload();
-      }, 1000);
+      }, 500); // Reduced from 1000ms to 500ms
       
     } catch (error) {
       console.error('❌ Frontend delete error:', error);
